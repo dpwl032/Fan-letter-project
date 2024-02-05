@@ -3,36 +3,8 @@ import styled from "styled-components";
 import { fakeData } from "shared/DummyData";
 import LetterForm from "components/LetterForm";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const StNav = styled.div`
-  height: 150px;
-  width: 800px;
-  background: yellow;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-`;
-
-const StUl = styled.ul`
-  justify-content: space-around;
-  width: 500px;
-  border: 1px solid red;
-  display: flex;
-  align-items: center;
-`;
-
-const StButton = styled.button`
-  border: 1px solid black;
-  width: 100px;
-  height: 30px;
-  border-radius: 10px;
-  text-align: center;
-  /* ${(props) => props.$hoverItem}:hover {
-    border-radius: 10px;
-    color: white;
-    background-color: red;
-  } */
-`;
 //이름을 배열에 담는다.
 const celebrityList = ["지젤", "카리나", "윈터", "닝닝"];
 
@@ -54,106 +26,28 @@ const celebrityJob = (who) => {
 
 /*item style*/
 
-const StItemUl = styled.ul`
-  width: 800px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid black;
-  gap: 20px;
-`;
-
-const StItemLi = styled.li`
-  width: 560px;
-  height: 200px;
-  text-align: center;
-  border: 2px solid red;
-  border-radius: 15px;
-`;
-
-const LetterItems = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-`;
-
-const ProfileImg = styled.div`
-  width: 30%;
-`;
-
-const LetterItem = styled.div`
-  width: 70%;
-`;
-
-//말줄임 표시 처리방법
-const LengthLimit = styled.p`
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`;
-
 function LettersNav() {
   const [name, setName] = useState("카리나");
-  // const [letters, setLetters] = useState([]);
+  const [letters, setLetters] = useState([]);
+
+  const { letter: reduxletter } = useSelector((state) => {
+    return state.letter;
+  });
+  console.log("reduxletter", reduxletter);
 
   const onclickHandler = (who) => {
     setName(who);
   };
 
-  const [letters, setLetters] = useState([...fakeData]);
+  // const [letters, setLetters] = useState([...fakeData]);
 
   const onSubmitLetter = (nextLetter) => {
     setLetters((prevLetter) => [nextLetter, ...prevLetter]);
   };
 
-  const filteredLetters = letters.filter((data) => {
+  const filteredLetters = reduxletter.filter((data) => {
     return data.writedTo === name;
   });
-
-  //초기화
-
-  // localStorage.setItem("letters", JSON.stringify(letters));
-  const detailLetter = JSON.parse(localStorage.getItem("letters"));
-  // const allLetters = localStorage.setItem("letters", JSON.stringify(letters));
-  console.log("get", detailLetter);
-  // console.log("set", allLetters);
-  console.log("-----------");
-
-  useEffect(() => {
-    localStorage.setItem("letters", JSON.stringify(letters));
-  }, [letters]);
-
-  // console.log("detailLetter", detailLetter);
-
-  // useEffect(() => {
-  //   // 업데이트 된 후에 출력
-  //   const ahahah = localStorage.setItem(
-  //     "letters",
-  //     JSON.stringify(detailLetter)
-  //   );
-
-  //   return () => {
-  //     // 업데이트 되기 전에 출력
-  //     console.log("업데이트 전", letters);
-  //     const nowData = JSON.parse(localStorage.getItem("letters"));
-  //     console.log("현재데이터", nowData);
-  //     console.log("-----------------");
-  //   };
-  // }, [setLetters]);
-
-  // // const filteredLetters = detailLetter.filter((data) => {
-  // //   return data.writedTo === name;
-  // // });
-  useEffect(() => {
-    console.log("처음에만");
-  }, []);
-  useEffect(() => {
-    console.log("렌더링 될때마다");
-  });
-  useEffect(() => {
-    console.log("값이변경 될때마다");
-  }, [letters]);
 
   return (
     <>
@@ -211,3 +105,72 @@ function LettersNav() {
 }
 
 export default LettersNav;
+
+const StNav = styled.div`
+  height: 150px;
+  width: 800px;
+  background: yellow;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+`;
+
+const StUl = styled.ul`
+  justify-content: space-around;
+  width: 500px;
+  border: 1px solid red;
+  display: flex;
+  align-items: center;
+`;
+
+const StButton = styled.button`
+  border: 1px solid black;
+  width: 100px;
+  height: 30px;
+  border-radius: 10px;
+  text-align: center;
+  /* ${(props) => props.$hoverItem}:hover {
+    border-radius: 10px;
+    color: white;
+    background-color: red;
+  } */
+`;
+
+const StItemUl = styled.ul`
+  width: 800px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid black;
+  gap: 20px;
+`;
+
+const StItemLi = styled.li`
+  width: 560px;
+  height: 200px;
+  text-align: center;
+  border: 2px solid red;
+  border-radius: 15px;
+`;
+
+const LetterItems = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+`;
+
+const ProfileImg = styled.div`
+  width: 30%;
+`;
+
+const LetterItem = styled.div`
+  width: 70%;
+`;
+
+//말줄임 표시 처리방법
+const LengthLimit = styled.p`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;

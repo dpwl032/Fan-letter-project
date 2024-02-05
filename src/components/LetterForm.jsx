@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
-
-const StForm = styled.div`
-  width: 800px;
-  height: 300px;
-  border: 1px solid black;
-`;
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_LETTER } from "redux/modules/letter";
 
 function LetterForm({ onSubmitLetter }) {
+  const { letter: reduxletter } = useSelector((state) => {
+    return state.letter;
+  });
+  const dispatch = useDispatch();
+
+  console.log("Form", reduxletter);
   const today = new Date();
   const dateString = today.toLocaleDateString("ko-KR", {
     year: "numeric",
@@ -19,11 +21,6 @@ function LetterForm({ onSubmitLetter }) {
     const writedTo = e.target.writedTo.value;
     const nickname = e.target.nickname.value;
     const content = e.target.content.value;
-
-    // const allLetters = localStorage.setItem(
-    //   "letters",
-    //   JSON.stringify([...nickname])
-    // );
 
     if (!nickname || !content) {
       alert("빈칸없이 내용을 입력해주세요!");
@@ -48,6 +45,11 @@ function LetterForm({ onSubmitLetter }) {
       content,
       writedTo,
     });
+
+    dispatch({
+      type: ADD_LETTER,
+    });
+
     e.target.reset();
   };
 
@@ -97,3 +99,9 @@ function LetterForm({ onSubmitLetter }) {
 }
 
 export default LetterForm;
+
+const StForm = styled.div`
+  width: 800px;
+  height: 300px;
+  border: 1px solid black;
+`;
