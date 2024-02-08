@@ -6,8 +6,7 @@ body{
     display:flex;
     flex-direction: column;
 }
-
-
+//
 `;
 
 export default GlobalStyle;
