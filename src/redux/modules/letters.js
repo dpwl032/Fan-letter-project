@@ -8,6 +8,7 @@ const DELETE_LETTER = "letters/DELETE_LETTER";
 const EDIT_LETTER = "letters/EDIT_LETTER";
 
 //action creator
+
 export const addLetter = (payload) => {
   return { type: ADD_LETTER, payload };
 };

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LetterForm from "components/LetterForm";
 import Item from "./Item";
 import { LettersContext } from "context/LettersContext";
+import { useSelector, useDispatch } from "react-redux";
 
 function LettersNav() {
   //context Api
