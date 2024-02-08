@@ -20,6 +20,25 @@ export const editLetter = (payload) => {
 
 const initialState = fakeData;
 
-const letters = (state = initialState, action) => {};
+const letters = (state = initialState, action) => {
+  switch (action.type) {
+    case ADD_LETTER:
+      const newLetter = action.payload;
+      return [newLetter, ...state];
+    case DELETE_LETTER:
+      const letterId = action.payload;
+      return state.filter((letter) => !letterId == letterId);
+    case EDIT_LETTER:
+      const { id, editingText } = action.payload;
+      return state.map((letter) => {
+        if (letter.id == id) {
+          return { ...letter, content: editLetter };
+        }
+        return letter;
+      });
+    default:
+      return state;
+  }
+};
 
 export default letters;
