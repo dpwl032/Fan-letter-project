@@ -6,27 +6,26 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { LettersContext } from "context/LettersContext";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteLetterItem } from "../redux/modules/letters";
 
 function Detail() {
-  //context Api
-  const { modifyLetter, click, setClick, setLetters } =
-    useContext(LettersContext);
-
+  const [click, setClick] = useState(false);
+  //수정내용 state
+  const [changeContent, setChangeContent] = useState(foundLetter.content);
   const params = useParams();
   const navigate = useNavigate();
 
-  //로컬스토리지에 저장한 값 들고오기
-  const detailLetter = JSON.parse(localStorage.getItem("letters"));
+  //redux
+  const dispatch = useDispatch();
+  const letter = useSelector((state) => state.letters);
 
   //그 값들 중에서 넘겨오는 id와  일치한 것만 보여주기
-  const foundLetter = detailLetter.find((letter) => {
+  const foundLetter = letter.find((letter) => {
     return letter.id === params.id;
   });
 
-  //수정버튼
-
-  //수정내용 state
-  const [changeContent, setChangeContent] = useState(foundLetter.content);
+  const { nickname, createdAt, content, id } = foundLetter;
 
   const onChangeLetter = (e) => {
     let { content, id } = foundLetter;
@@ -41,26 +40,20 @@ function Detail() {
     const searchIndex = resultLetter.findIndex((e) => e.id === id);
     resultLetter[searchIndex].content = changeContent;
 
-    localStorage.setItem("letters", JSON.stringify(resultLetter));
-    const resultLetters = JSON.parse(localStorage.getItem("letters"));
-    setLetters(resultLetters);
     setClick(false);
 
     navigate("/");
   };
 
   // 삭제버튼
-  const deleteLetter = () => {
+  const deleteLetter = (id) => {
     alert("삭제하시겠습니까?");
-    //detailLetter : 기존배열, deletedLetter : 삭제한 요소
-    const searchData = foundLetter.content;
-    const searchIndex = detailLetter.findIndex((e) => e.content === searchData);
-    const deletedLetter = detailLetter.splice(searchIndex, 1);
-    localStorage.setItem("letters", JSON.stringify(detailLetter));
-    const test = JSON.parse(localStorage.getItem("letters"));
-    setLetters(test);
-
+    dispatch(deleteLetterItem(id));
     navigate("/");
+  };
+
+  const modifyLetter = (e) => {
+    setClick(!click);
   };
 
   return (
@@ -74,15 +67,15 @@ function Detail() {
       </StHeader>
       <StDetail>
         <DetailOneLetter>
-          <div>{foundLetter.nickname}</div>
-          <div>{foundLetter.createdAt}</div>
+          <div>{nickname}</div>
+          <div>{createdAt}</div>
           <div>
             {" "}
             {click ? (
               <TextArea
                 type="text"
                 name="content"
-                defaultValue={foundLetter.content}
+                defaultValue={content}
                 onChange={(e) => setChangeContent(e.target.value)}
               ></TextArea>
             ) : (
@@ -100,12 +93,12 @@ function Detail() {
               {click ? (
                 ""
               ) : (
-                <DetailBtn onClick={deleteLetter}>삭제하기</DetailBtn>
+                <DetailBtn onClick={() => deleteLetter(id)}>삭제하기</DetailBtn>
               )}
               {click ? (
                 ""
               ) : (
-                <DetailBtn onClick={modifyLetter}>수정하기</DetailBtn>
+                <DetailBtn onClick={() => modifyLetter(id)}>수정하기</DetailBtn>
               )}
               {click ? (
                 <DetailBtn

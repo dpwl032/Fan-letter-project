@@ -1,11 +1,63 @@
 import styled from "styled-components";
 import { LettersContext } from "context/LettersContext";
 import { useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { nameSelect } from "../redux/modules/name";
+import { addLetter } from "../redux/modules/letters";
+import { useState } from "react";
 
 function LetterForm() {
-  //context Api
-  const { handleSubmit, celebrityList, writedTo, onChangeName } =
-    useContext(LettersContext);
+  const celebrityList = ["지젤", "카리나", "윈터", "닝닝"];
+  const [writedTo, setWritedTo] = useState("지젤");
+  const today = new Date();
+  const dateString = today.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  const onChangeName = (e) => {
+    setWritedTo(e.target.value);
+  };
+
+  //redux
+  const name = useSelector((state) => state.name);
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const nickname = e.target.nickname.value;
+    const content = e.target.content.value;
+
+    if (!nickname || !content) {
+      alert("빈칸없이 내용을 입력해주세요!");
+      return;
+    }
+
+    if (nickname.length >= 20) {
+      alert("20글자를 초과할 수 없습니다");
+      nickname.current.focus();
+      return;
+    }
+
+    if (content.length >= 100) {
+      alert("100글자를 초과할 수 없습니다");
+      return;
+    }
+
+    onSubmitLetter({
+      createdAt: dateString,
+      nickname,
+      id: crypto.randomUUID(),
+      content,
+      writedTo,
+    });
+    e.target.reset();
+  };
+
+  const onSubmitLetter = (nextLetter) => {
+    dispatch(addLetter(nextLetter));
+  };
 
   return (
     <>

@@ -4,11 +4,33 @@ import LetterForm from "components/LetterForm";
 import Item from "./Item";
 import { LettersContext } from "context/LettersContext";
 import { useSelector, useDispatch } from "react-redux";
+import { nameSelect } from "../redux/modules/name";
 
 function LettersNav() {
-  //context Api
-  const { name, onclickHandler } = useContext(LettersContext);
-  const { celebrityList, celebrityJob } = useContext(LettersContext);
+  //redux
+  const dispatch = useDispatch();
+  const name = useSelector((state) => state.name);
+
+  const celebrityList = ["지젤", "카리나", "윈터", "닝닝"];
+
+  const celebrityJob = (who) => {
+    switch (who) {
+      case "지젤":
+        return "지젤";
+      case "카리나":
+        return "카리나";
+      case "윈터":
+        return "윈터";
+      case "닝닝":
+        return "닝닝";
+      default:
+        return "연예인이 아닙니다";
+    }
+  };
+
+  const onclickHandler = (who) => {
+    dispatch(nameSelect(who));
+  };
 
   return (
     <>

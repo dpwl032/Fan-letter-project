@@ -1,45 +1,49 @@
 import { fakeData } from "shared/DummyData";
 
-//팬레터 추가
-const ADD_LETTER = "letters/ADD_LETTER";
-//팬레터 삭제
-const DELETE_LETTER = "letters/DELETE_LETTER";
-//팬레터 수정
+//action value
+const ADD_LETTER = "letter/ADD_LETTER";
+const DELETE_LETTER = "letter/DELETE_LETTER";
 const EDIT_LETTER = "letters/EDIT_LETTER";
 
 //action creator
-
 export const addLetter = (payload) => {
-  return { type: ADD_LETTER, payload };
-};
-export const deleteLetter = (payload) => {
-  return { type: DELETE_LETTER, payload };
-};
-export const editLetter = (payload) => {
-  return { type: EDIT_LETTER, payload };
+  return {
+    type: ADD_LETTER,
+    payload,
+  };
 };
 
+export const deleteLetterItem = (payload) => {
+  return {
+    type: DELETE_LETTER,
+    payload,
+  };
+};
+
+export const editLetter = (payload) => {
+  return {
+    type: EDIT_LETTER,
+    payload,
+  };
+};
+
+//초기값
 const initialState = fakeData;
 
-const letters = (state = initialState, action) => {
+//reducer
+const lettersReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_LETTER:
-      const newLetter = action.payload;
-      return [newLetter, ...state];
+      const nextLetter = action.payload;
+      return [nextLetter, ...state];
     case DELETE_LETTER:
-      const letterId = action.payload;
-      return state.filter((letter) => !letterId == letterId);
+      const deletedLetter = state.filter((item) => item.id !== action.payload);
+      return deletedLetter;
     case EDIT_LETTER:
-      const { id, editingText } = action.payload;
-      return state.map((letter) => {
-        if (letter.id == id) {
-          return { ...letter, content: editLetter };
-        }
-        return letter;
-      });
+      return state;
     default:
       return state;
   }
 };
 
-export default letters;
+export default lettersReducer;

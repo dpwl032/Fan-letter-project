@@ -1,9 +1,12 @@
 import { createStore, combineReducers } from "redux";
-import letters from "../modules/letters";
-import member from "../modules/member";
+import lettersReducer from "../modules/letters";
+import nameReducer from "../modules/name";
 import { devToolsEnhancer } from "redux-devtools-extension";
 
-const rootReducer = combineReducers({ letters, member });
+const rootReducer = combineReducers({
+  letters: lettersReducer,
+  name: nameReducer,
+});
 
 const store = createStore(rootReducer, devToolsEnhancer());
 
