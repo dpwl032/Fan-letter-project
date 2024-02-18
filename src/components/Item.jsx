@@ -5,10 +5,10 @@ import { LettersContext } from "context/LettersContext";
 import proImg from "assets/9720037.jpg";
 
 function Item() {
-  const { name, letters, setLetters } = useContext(LettersContext);
+  const { name, letters, selectName } = useContext(LettersContext);
 
   const filteredLetters = letters.filter((data) => {
-    return data.writedTo == name;
+    return data.selectName == name;
   });
 
   return (

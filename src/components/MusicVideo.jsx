@@ -26,8 +26,8 @@ function MusicVideo() {
           width="720"
           height="405"
           src="https://www.youtube.com/embed/M7lc1UVf-VE"
-          frameborder="0"
-          allowfullscreen
+          frameBorder="0"
+          allowFullScreen
         />
       </YotubVideo>
     </>

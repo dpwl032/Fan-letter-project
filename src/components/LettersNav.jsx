@@ -7,8 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 function LettersNav() {
   //context Api
-  const { name, setName, letters, setLetters, onSubmitLetter, onclickHandler } =
-    useContext(LettersContext);
+  const { name, onclickHandler } = useContext(LettersContext);
   const { celebrityList, celebrityJob } = useContext(LettersContext);
 
   return (

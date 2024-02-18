@@ -3,13 +3,14 @@ import { fakeData } from "shared/DummyData";
 import { useParams } from "react-router-dom";
 
 export const LettersContext = createContext();
-//redux 리팩토링 시작s
+
+//바뀌지 않을 정적인 데이터는 컴포넌트의 바깥에서 선언하기
+const celebrityList = ["지젤", "카리나", "윈터", "닝닝"];
 
 const LetterProvider = ({ children }) => {
   //styled
-  const celebrityList = ["지젤", "카리나", "윈터", "닝닝"];
 
-  //이름을 넣으면 체크 후 누군지 리턴한다
+  // 이름을 넣으면 체크 후 누군지 리턴한다
   const celebrityJob = (who) => {
     switch (who) {
       case "지젤":
@@ -28,11 +29,14 @@ const LetterProvider = ({ children }) => {
   //Nav 전역관리
   const [name, setName] = useState("카리나");
 
+  //select관리
+  const [selectName, setSelectName] = useState("");
+
   //fake Data 오류
-  // const [letters, setLetters] = useState([...fakeData]);
-  const [letters, setLetters] = useState(
-    JSON.parse(localStorage.getItem("letters")) ?? [...fakeData]
-  );
+  const [letters, setLetters] = useState([...fakeData]);
+  // const [letters, setLetters] = useState(
+  //   JSON.parse(localStorage.getItem("letters")) ?? [...fakeData]
+  // );
 
   const onSubmitLetter = (nextLetter) => {
     setLetters((prevLetter) => [nextLetter, ...prevLetter]);
@@ -52,9 +56,15 @@ const LetterProvider = ({ children }) => {
     day: "numeric",
   });
 
+  const onChangeName = (e) => {
+    console.log("e", e.target.value);
+    setSelectName(e.target.value);
+    console.log(selectName);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const writedTo = e.target.writedTo.value;
+    // const writedTo = e.target.writedTo.value;
     const nickname = e.target.nickname.value;
     const content = e.target.content.value;
 
@@ -79,7 +89,7 @@ const LetterProvider = ({ children }) => {
       nickname,
       id: crypto.randomUUID(),
       content,
-      writedTo,
+      selectName,
     });
     e.target.reset();
   };
@@ -100,7 +110,6 @@ const LetterProvider = ({ children }) => {
         setName,
         letters,
         setLetters,
-
         onSubmitLetter,
         onclickHandler,
         today,
@@ -109,6 +118,9 @@ const LetterProvider = ({ children }) => {
         modifyLetter,
         click,
         setClick,
+        selectName,
+        setSelectName,
+        onChangeName,
       }}
     >
       {children}
