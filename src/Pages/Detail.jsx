@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { LettersContext } from "context/LettersContext";
 import styled from "styled-components";
-import LettersHeader from "components/LettersHeader";
+
 function Detail() {
   //context Api
   const { modifyLetter, click, setClick, setLetters } =

@@ -9,7 +9,6 @@ const celebrityList = ["지젤", "카리나", "윈터", "닝닝"];
 
 const LetterProvider = ({ children }) => {
   //styled
-
   // 이름을 넣으면 체크 후 누군지 리턴한다
   const celebrityJob = (who) => {
     switch (who) {
@@ -30,13 +29,13 @@ const LetterProvider = ({ children }) => {
   const [name, setName] = useState("카리나");
 
   //select관리
-  const [selectName, setSelectName] = useState("");
+  const [writedTo, setWritedTo] = useState("지젤");
 
   //fake Data 오류
-  const [letters, setLetters] = useState([...fakeData]);
-  // const [letters, setLetters] = useState(
-  //   JSON.parse(localStorage.getItem("letters")) ?? [...fakeData]
-  // );
+  // const [letters, setLetters] = useState([...fakeData]);
+  const [letters, setLetters] = useState(
+    JSON.parse(localStorage.getItem("letters")) ?? [...fakeData]
+  );
 
   const onSubmitLetter = (nextLetter) => {
     setLetters((prevLetter) => [nextLetter, ...prevLetter]);
@@ -56,14 +55,15 @@ const LetterProvider = ({ children }) => {
     day: "numeric",
   });
 
+  //select onChane & value로 변경
   const onChangeName = (e) => {
-    console.log("e", e.target.value);
-    setSelectName(e.target.value);
-    console.log(selectName);
+    setWritedTo(e.target.value);
+    // console.log(selectName);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    //select onChane & value로 변경
     // const writedTo = e.target.writedTo.value;
     const nickname = e.target.nickname.value;
     const content = e.target.content.value;
@@ -89,7 +89,7 @@ const LetterProvider = ({ children }) => {
       nickname,
       id: crypto.randomUUID(),
       content,
-      selectName,
+      writedTo,
     });
     e.target.reset();
   };
@@ -118,8 +118,8 @@ const LetterProvider = ({ children }) => {
         modifyLetter,
         click,
         setClick,
-        selectName,
-        setSelectName,
+        writedTo,
+        setWritedTo,
         onChangeName,
       }}
     >

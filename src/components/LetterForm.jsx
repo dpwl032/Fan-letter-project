@@ -4,7 +4,7 @@ import { useContext } from "react";
 
 function LetterForm() {
   //context Api
-  const { handleSubmit, celebrityList, selectName, onChangeName } =
+  const { handleSubmit, celebrityList, writedTo, onChangeName } =
     useContext(LettersContext);
 
   return (
@@ -38,7 +38,7 @@ function LetterForm() {
             />
           </TextFormSt>
           <SelectWrap>
-            <select value={selectName} onChange={onChangeName}>
+            <select value={writedTo} onChange={onChangeName}>
               {celebrityList.map((name) => (
                 <option value={`${name}`} key={name}>
                   {name}
