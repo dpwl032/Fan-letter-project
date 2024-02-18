@@ -1,14 +1,10 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { LettersContext } from "context/LettersContext";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import proImg from "assets/9720037.jpg";
 
 function Item() {
-  //context
-  // const { letters } = useContext(LettersContext);
-
   //redux
   const name = useSelector((state) => state.name);
   const letters = useSelector((state) => state.letters);

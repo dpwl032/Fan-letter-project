@@ -1,8 +1,7 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import LetterForm from "components/LetterForm";
 import Item from "./Item";
-import { LettersContext } from "context/LettersContext";
 import { useSelector, useDispatch } from "react-redux";
 import { nameSelect } from "../redux/modules/name";
 

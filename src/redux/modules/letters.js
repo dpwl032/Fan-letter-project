@@ -36,11 +36,21 @@ const lettersReducer = (state = initialState, action) => {
     case ADD_LETTER:
       const nextLetter = action.payload;
       return [nextLetter, ...state];
+
     case DELETE_LETTER:
       const deletedLetter = state.filter((item) => item.id !== action.payload);
       return deletedLetter;
+
     case EDIT_LETTER:
-      return state;
+      let { editContent, id } = action.payload;
+      const editedLetter = state.map((letter) => {
+        if (letter.id === id) {
+          return { ...letter, content: editContent };
+        } else {
+          return letter;
+        }
+      });
+      return editedLetter;
     default:
       return state;
   }

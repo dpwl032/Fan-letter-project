@@ -1,18 +1,18 @@
 //detail
 
-import React, { useContext } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { LettersContext } from "context/LettersContext";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteLetterItem } from "../redux/modules/letters";
+import { deleteLetterItem, editLetter } from "../redux/modules/letters";
 
 function Detail() {
   const [click, setClick] = useState(false);
   //수정내용 state
-  const [changeContent, setChangeContent] = useState(foundLetter.content);
+  const [editContent, setEditContent] = useState("");
+
   const params = useParams();
   const navigate = useNavigate();
 
@@ -20,28 +20,22 @@ function Detail() {
   const dispatch = useDispatch();
   const letter = useSelector((state) => state.letters);
 
-  //그 값들 중에서 넘겨오는 id와  일치한 것만 보여주기
+  //전체 letter 중에서 넘겨오는 id와  일치한 item만 보여주기
   const foundLetter = letter.find((letter) => {
     return letter.id === params.id;
   });
 
   const { nickname, createdAt, content, id } = foundLetter;
 
-  const onChangeLetter = (e) => {
-    let { content, id } = foundLetter;
-
-    if (changeContent === content) {
+  const onChangeLetter = () => {
+    if (!editContent) {
       alert("수정한 내용이 없습니다.");
       return;
     }
 
-    const resultLetter = JSON.parse(localStorage.getItem("letters"));
-    const searchData = resultLetter.id;
-    const searchIndex = resultLetter.findIndex((e) => e.id === id);
-    resultLetter[searchIndex].content = changeContent;
-
+    dispatch(editLetter({ id, editContent }));
     setClick(false);
-
+    alert("수정이 완료됐습니다.");
     navigate("/");
   };
 
@@ -52,13 +46,8 @@ function Detail() {
     navigate("/");
   };
 
-  const modifyLetter = (e) => {
-    setClick(!click);
-  };
-
   return (
     <>
-      {" "}
       <StHeader>
         <Link to="/">
           <HeaderBtn>YJ's made</HeaderBtn>
@@ -67,54 +56,54 @@ function Detail() {
       </StHeader>
       <StDetail>
         <DetailOneLetter>
-          <div>{nickname}</div>
-          <div>{createdAt}</div>
-          <div>
-            {" "}
+          <section>{nickname}</section>
+          <section>{createdAt}</section>
+          <section>
             {click ? (
               <TextArea
+                autoFocus
                 type="text"
                 name="content"
                 defaultValue={content}
-                onChange={(e) => setChangeContent(e.target.value)}
+                onChange={(e) => setEditContent(e.target.value)}
               ></TextArea>
             ) : (
               <p>{foundLetter.content}</p>
             )}
             <hr />
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                alignItems: "center",
-              }}
-            >
+            <ButtonWrap>
               {click ? (
                 ""
               ) : (
-                <DetailBtn onClick={() => deleteLetter(id)}>삭제하기</DetailBtn>
+                <>
+                  <DetailBtn onClick={() => setClick(true)}>수정하기</DetailBtn>
+                  <DetailBtn onClick={() => deleteLetter(id)}>
+                    삭제하기
+                  </DetailBtn>
+                </>
               )}
+
               {click ? (
-                ""
-              ) : (
-                <DetailBtn onClick={() => modifyLetter(id)}>수정하기</DetailBtn>
-              )}
-              {click ? (
-                <DetailBtn
-                  name="changeButton"
-                  onClick={(e) => onChangeLetter({ foundLetter })}
-                >
-                  수정완료
-                </DetailBtn>
+                <>
+                  {" "}
+                  <DetailBtn onClick={() => setClick(false)}>
+                    취소하기
+                  </DetailBtn>
+                  <DetailBtn
+                    name="changeButton"
+                    onClick={(e) => onChangeLetter({ foundLetter })}
+                  >
+                    수정완료
+                  </DetailBtn>
+                </>
               ) : (
                 ""
               )}
               <Link to="/">
                 <DetailBtn>홈으로가기</DetailBtn>
               </Link>
-            </div>
-          </div>
+            </ButtonWrap>
+          </section>
         </DetailOneLetter>
       </StDetail>
     </>
@@ -178,4 +167,11 @@ const TextArea = styled.textarea`
   resize: none;
   width: 350px;
   height: 170px;
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  alignitems: center;
 `;

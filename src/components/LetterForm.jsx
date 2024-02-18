@@ -1,8 +1,5 @@
 import styled from "styled-components";
-import { LettersContext } from "context/LettersContext";
-import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { nameSelect } from "../redux/modules/name";
 import { addLetter } from "../redux/modules/letters";
 import { useState } from "react";
 
@@ -53,6 +50,8 @@ function LetterForm() {
       writedTo,
     });
     e.target.reset();
+
+    alert("팬레터가 등록됐습니다!");
   };
 
   const onSubmitLetter = (nextLetter) => {
